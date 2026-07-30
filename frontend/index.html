@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Manager</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="container">
+
+    <h1>📇 Contact Manager</h1>
+
+    <!-- Form to add or update a contact -->
+    <form id="contactForm">
+      <h2 id="formTitle">Add New Contact</h2>
+
+      <!-- This hidden input will store the contact id when we edit a contact -->
+      <input type="hidden" id="contactId" />
+
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" placeholder="Enter full name" required />
+        <small class="error-text" id="nameError"></small>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter email address" required />
+        <small class="error-text" id="emailError"></small>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="text" id="phone" placeholder="Enter 10-digit phone number" required />
+        <small class="error-text" id="phoneError"></small>
+      </div>
+
+      <div class="form-group">
+        <label for="address">Address (optional)</label>
+        <input type="text" id="address" placeholder="Enter address" />
+      </div>
+
+      <div class="form-buttons">
+        <button type="submit" id="submitBtn">Add Contact</button>
+        <button type="button" id="cancelBtn" style="display:none;">Cancel</button>
+      </div>
+    </form>
+
+    <!-- Search box to filter contacts -->
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="🔍 Search contacts by name..." />
+    </div>
+
+    <!-- List where all contacts will be displayed -->
+    <h2>Your Contacts</h2>
+    <div id="contactList" class="contact-list">
+      <!-- Contact cards will be added here dynamically using JavaScript -->
+      <p id="emptyMessage">No contacts yet. Add your first contact above!</p>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
