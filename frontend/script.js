@@ -1,9 +1,9 @@
 // ---------- Backend API URL ----------
 // This is where our Express server will be running.
-// When we deploy later, we will change this to our live backend URL.
-const API_URL = "http://localhost:5000/api/contacts";
+// When we deploy later, phir change krenge live backend URL se 
+// const API_URL = "http://localhost:5000/api/contacts";
+const API_URL = "https://contact-manager-api.onrender.com/api/contacts";
 
-// ---------- Grabbing all the elements we need from index.html ----------
 const contactForm = document.getElementById("contactForm");
 const formTitle = document.getElementById("formTitle");
 const contactIdInput = document.getElementById("contactId");
@@ -23,7 +23,7 @@ const searchInput = document.getElementById("searchInput");
 const contactList = document.getElementById("contactList");
 const emptyMessage = document.getElementById("emptyMessage");
 
-// This array will hold all contacts we get from the backend.
+
 // We keep a copy here so searching is fast (no need to call server every time).
 let allContacts = [];
 
@@ -78,7 +78,7 @@ function renderContacts(contacts) {
 }
 
 // ---------- Form Validation ----------
-// Returns true if the form is valid, false otherwise
+
 function validateForm() {
   let isValid = true;
 
@@ -91,20 +91,20 @@ function validateForm() {
   const emailValue = emailInput.value.trim();
   const phoneValue = phoneInput.value.trim();
 
-  // Name validation - just check it's not empty and has at least 2 letters
+  // Name validation 
   if (nameValue.length < 2) {
     nameError.textContent = "Name must be at least 2 characters.";
     isValid = false;
   }
 
-  // Email validation - simple pattern check
+  // Email validation
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailPattern.test(emailValue)) {
     emailError.textContent = "Please enter a valid email address.";
     isValid = false;
   }
 
-  // Phone validation - must be exactly 10 digits
+  // Phone validation 
   const phonePattern = /^[0-9]{10}$/;
   if (!phonePattern.test(phoneValue)) {
     phoneError.textContent = "Phone number must be exactly 10 digits.";
