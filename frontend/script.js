@@ -2,7 +2,8 @@
 // This is where our Express server will be running.
 // When we deploy later, phir change krenge live backend URL se 
 // const API_URL = "http://localhost:5000/api/contacts";
-const API_URL = "https://contact-manager-api.onrender.com/api/contacts";
+// const API_URL = "https://contact-manager-api.onrender.com/api/contacts";
+const API_URL = "https://contact-manager-zdje.onrender.com/api/contacts";
 
 const contactForm = document.getElementById("contactForm");
 const formTitle = document.getElementById("formTitle");
