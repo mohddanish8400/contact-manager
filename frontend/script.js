@@ -165,7 +165,7 @@ function validateForm() {
 }
 
 // ---------- Handle Form Submit (Add or Update) ----------
-contactForm.addEventListener("submit", async function (e) {
+/*contactForm.addEventListener("submit", async function (e) {
   e.preventDefault(); // stop the page from refreshing
 
   // First check if the form data is valid
@@ -211,7 +211,76 @@ contactForm.addEventListener("submit", async function (e) {
     console.log("Error saving contact:", error);
     alert("Something went wrong while saving the contact.");
   }
+});*/
+// ---------- Handle Form Submit (Add or Update) ----------
+contactForm.addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  // Demo account is view-only
+  if (loggedInUser.role === "demo") {
+    alert(
+      "Demo Account is view-only.\n\nPlease Sign Up to add or edit contacts."
+    );
+    return;
+  }
+
+  // First check if the form data is valid
+  if (!validateForm()) {
+    return;
+  }
+
+  const contactData = {
+    name: nameInput.value.trim(),
+    email: emailInput.value.trim(),
+    phone: phoneInput.value.trim(),
+    address: addressInput.value.trim(),
+  };
+
+  const existingId = contactIdInput.value;
+
+  try {
+    let response;
+
+    if (existingId) {
+      // Update existing contact
+      response = await fetch(`${API_URL}/${existingId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(contactData),
+      });
+    } else {
+      // Add new contact
+      response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(contactData),
+      });
+    }
+
+    const data = await response.json();
+
+    // Backend rejected the request
+    if (!response.ok) {
+      alert(data.message || "Unable to save contact.");
+      return;
+    }
+
+    // Only reset after successful Add/Update
+    resetForm();
+    getContacts();
+
+  } catch (error) {
+    console.log("Error saving contact:", error);
+    alert("Something went wrong while saving the contact.");
+  }
 });
+// 
 
 // ---------- Edit Contact ----------
 function editContact(id) {
@@ -255,7 +324,7 @@ function resetForm() {
 }
 
 // ---------- Delete Contact ----------
-async function deleteContact(id) {
+/*async function deleteContact(id) {
   // Ask user to confirm before deleting, so they don't do it by mistake
   const confirmDelete = confirm("Are you sure you want to delete this contact?");
   if (!confirmDelete) return;
@@ -264,6 +333,8 @@ async function deleteContact(id) {
     // await fetch(`${API_URL}/${id}`, {
     //   method: "DELETE",
     // });
+    // last update
+    // 
     const response = await fetch(`${API_URL}/${id}`, {
   method: "DELETE",
   headers: {
@@ -282,7 +353,49 @@ if (!response.ok) {
     console.log("Error deleting contact:", error);
     alert("Something went wrong while deleting the contact.");
   }
+}*/
+
+// ---------- Delete Contact ----------
+async function deleteContact(id) {
+  // Demo account is view-only
+  if (loggedInUser.role === "demo") {
+    alert(
+      "Demo Account is view-only.\n\nPlease Sign Up to delete contacts."
+    );
+    return;
+  }
+
+  // Ask user to confirm before deleting
+  const confirmDelete = confirm(
+    "Are you sure you want to delete this contact?"
+  );
+
+  if (!confirmDelete) return;
+
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.message || "Unable to delete contact.");
+      return;
+    }
+
+    alert("Contact deleted successfully.");
+    getContacts();
+
+  } catch (error) {
+    console.log("Error deleting contact:", error);
+    alert("Something went wrong while deleting the contact.");
+  }
 }
+// 
 
 // ---------- Search / Filter Contacts ----------
 searchInput.addEventListener("input", function () {
