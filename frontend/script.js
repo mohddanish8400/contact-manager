@@ -1,6 +1,29 @@
+// ---------- Authentication ----------
+
+const token = localStorage.getItem("token");
+const loggedInUser = JSON.parse(localStorage.getItem("user"));
+
+if (!token || !loggedInUser) {
+  window.location.href = "login.html";
+}
+
+// Show logged-in user
+document.getElementById("loggedInUser").textContent =
+  loggedInUser.username;
+
+document.getElementById("userRole").textContent =
+  loggedInUser.role === "demo" ? "Demo Account" : "Registered User";
+
+// Logout
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+
+  window.location.href = "login.html";
+});
 // ---------- Backend API URL ----------
 // This is where our Express server will be running.
-// When we deploy later, phir change krenge live backend URL se 
+
 // const API_URL = "http://localhost:5000/api/contacts";
 // const API_URL = "https://contact-manager-api.onrender.com/api/contacts";
 const API_URL = "https://contact-manager-zdje.onrender.com/api/contacts";
@@ -32,15 +55,41 @@ let allContacts = [];
 window.addEventListener("DOMContentLoaded", getContacts);
 
 // ---------- Function to fetch all contacts from backend ----------
+
+// async function getContacts() {
+//   try {
+//     const response = await fetch(API_URL);
+//     const data = await response.json();
+//     allContacts = data;
+//     renderContacts(allContacts);
+//   } catch (error) {
+//     console.log("Error fetching contacts:", error);
+//     contactList.innerHTML = "<p>Something went wrong while loading contacts.</p>";
+//   }
+// }
 async function getContacts() {
   try {
-    const response = await fetch(API_URL);
+    const response = await fetch(API_URL, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
     const data = await response.json();
+
+    if (!response.ok) {
+      console.log("Error loading contacts:", data.message);
+      return;
+    }
+
     allContacts = data;
     renderContacts(allContacts);
+
   } catch (error) {
     console.log("Error fetching contacts:", error);
-    contactList.innerHTML = "<p>Something went wrong while loading contacts.</p>";
+
+    contactList.innerHTML =
+      "<p>Something went wrong while loading contacts.</p>";
   }
 }
 
@@ -139,14 +188,19 @@ contactForm.addEventListener("submit", async function (e) {
       // If there is an id, it means we are editing an existing contact
       await fetch(`${API_URL}/${existingId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+                 "Content-Type": "application/json",
+                 Authorization: `Bearer ${token}`,
+                },
         body: JSON.stringify(contactData),
       });
     } else {
       // Otherwise, we are adding a brand new contact
       await fetch(API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`, 
+                  },
         body: JSON.stringify(contactData),
       });
     }
@@ -160,7 +214,6 @@ contactForm.addEventListener("submit", async function (e) {
 });
 
 // ---------- Edit Contact ----------
-// This function runs when the user clicks the "Edit" button on a contact card
 function editContact(id) {
   // Find the contact in our local array using its id
   const contact = allContacts.find((c) => c._id === id);
@@ -208,9 +261,22 @@ async function deleteContact(id) {
   if (!confirmDelete) return;
 
   try {
-    await fetch(`${API_URL}/${id}`, {
-      method: "DELETE",
-    });
+    // await fetch(`${API_URL}/${id}`, {
+    //   method: "DELETE",
+    // });
+    const response = await fetch(`${API_URL}/${id}`, {
+  method: "DELETE",
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
+
+const data = await response.json();
+
+if (!response.ok) {
+  alert(data.message || "Unable to delete contact.");
+  return;
+}
     getContacts(); // reload the list after deleting
   } catch (error) {
     console.log("Error deleting contact:", error);

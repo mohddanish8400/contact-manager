@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Login - Contact Manager</title>
+
+  <link rel="stylesheet" href="login.css" />
+</head>
+
+<body>
+
+  <div class="login-container">
+
+    <div class="login-card">
+
+      <h1>Contact Manager</h1>
+
+      <p class="subtitle">Login to continue</p>
+
+      <form id="loginForm">
+
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            placeholder="Enter username"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter password"
+            required
+          />
+        </div>
+
+        <button type="submit" class="login-btn">
+          Login
+        </button>
+
+      </form>
+
+      <p id="loginMessage"></p>
+
+      <div class="demo-box">
+
+        <h3>Demo Account</h3>
+
+        <p>
+          Username: <strong>admin</strong>
+        </p>
+
+        <p>
+          Password: <strong>admin123</strong>
+        </p>
+
+        <small>
+          Demo account can view and search contacts.
+          Signup is required to add, edit or delete contacts.
+        </small>
+
+      </div>
+
+      <p class="signup-text">
+        Don't have an account?
+        <a href="signup.html">Create an account</a>
+      </p>
+
+    </div>
+
+  </div>
+
+  <script src="login.js"></script>
+
+</body>
+</html>

@@ -1,5 +1,3 @@
-// This is the main file that starts our backend server.
-
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -7,6 +5,8 @@ require("dotenv").config(); // this lets us use variables from our .env file
 
 // Importing our routes file (we will create this next)
 const contactRoutes = require("./routes/contactRoutes");
+// for authentication(login,signup)
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
@@ -17,8 +17,8 @@ app.use(express.json()); // allows us to read JSON data sent in requests (req.bo
 // ---------- Routes ----------
 // Any request that starts with /api/contacts will be handled in contactRoutes.js
 app.use("/api/contacts", contactRoutes);
+app.use("/api/auth", authRoutes);
 
-// A simple test route to check if the server is working
 app.get("/", (req, res) => {
   res.send("Contact Manager API is running...");
 });

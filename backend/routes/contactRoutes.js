@@ -5,6 +5,9 @@ const express = require("express");
 const router = express.Router();
 const Contact = require("../models/Contact");
 
+const authMiddleware = require("../middleware/authMiddleware");
+const userOnlyMiddleware = require("../middleware/userOnlyMiddleware");
+
 // ---------- GET all contacts ----------
 // Route: GET /api/contacts
 router.get("/", async (req, res) => {
@@ -35,7 +38,10 @@ router.get("/:id", async (req, res) => {
 
 // ---------- CREATE a new contact ----------
 // Route: POST /api/contacts
-router.post("/", async (req, res) => {
+
+/*router.post("/", authMiddleware, async (req, res) => {*/
+  router.post("/", authMiddleware, userOnlyMiddleware, async (req, res) => {
+// router.post("/", async (req, res) => {
   try {
     const { name, email, phone, address } = req.body;
 
@@ -55,7 +61,9 @@ router.post("/", async (req, res) => {
 
 // ---------- UPDATE an existing contact ----------
 // Route: PUT /api/contacts/:id
-router.put("/:id", async (req, res) => {
+/*router.put("/:id", authMiddleware, async (req, res) => {*/
+  router.put("/:id", authMiddleware, userOnlyMiddleware, async (req, res) => {
+// router.put("/:id", async (req, res) => {
   try {
     const { name, email, phone, address } = req.body;
 
@@ -77,7 +85,9 @@ router.put("/:id", async (req, res) => {
 
 // ---------- DELETE a contact ----------
 // Route: DELETE /api/contacts/:id
-router.delete("/:id", async (req, res) => {
+/*router.delete("/:id", authMiddleware, async (req, res) => {*/
+  router.delete("/:id", authMiddleware, userOnlyMiddleware, async (req, res) => {
+// router.delete("/:id", async (req, res) => {
   try {
     const deletedContact = await Contact.findByIdAndDelete(req.params.id);
 
